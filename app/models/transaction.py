@@ -13,15 +13,15 @@ class Transaction(db.Model):
     sender = db.relationship('User', foreign_keys=[sender_id], backref='sent_transactions')
     receiver = db.relationship('User', foreign_keys=[receiver_id], backref='received_transactions')
 
-    def __init__(self, sender_id, receiver_id, amount, transaction_type):
+    """def __init__(self, sender_id, receiver_id, amount, transaction_type):
         allowed_types = ['credit', 'debit']
         if transaction_type not in allowed_types:
             raise ValueError(f"Invalid transaction_type: {transaction_type}. Allowed types are {allowed_types}.")
-        
+     
         self.sender_id = sender_id
         self.receiver_id = receiver_id
         self.amount = amount
         self.transaction_type = transaction_type
-
+        """
     def __repr__(self):
         return f"<Transaction {self.id} | {self.transaction_type} | {self.amount}>"

@@ -13,6 +13,11 @@ def create_app():
 
     # Import and register routes
     from app.routes.user_routes import user_routes
+    from app.routes.account_routes import account_routes
+    from app.routes.transaction_routes import transaction_routes
+
+    app.register_blueprint(transaction_routes, url_prefix='/api/v1')
+    app.register_blueprint(account_routes, url_prefix='/api/v1')
     app.register_blueprint(user_routes, url_prefix="/api/v1")
 
     # Import models

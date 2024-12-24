@@ -9,7 +9,6 @@ account_routes = Blueprint('account', __name__)
 def add_account():
     data = request.get_json()
     user_id = data.get('user_id')
-    bank_name = data.get('bank_name')
     account_number = data.get('account_number')
     balance = data.get('balance')
 
@@ -22,7 +21,6 @@ def add_account():
 
     account = Account(
         user_id=user_id,
-        bank_name=bank_name,
         account_number=account_number,
         balance=balance
     )
@@ -39,7 +37,7 @@ def get_accounts(user_id):
 
     accounts = Account.query.filter_by(user_id=user_id).all()
     return jsonify([
-        {"id": acc.id, "bank_name": acc.bank_name, "account_number": acc.account_number, "balance": acc.balance}
+        {"id": acc.id, "account_number": acc.account_number, "balance": acc.balance}
         for acc in accounts
     ]), 200
 

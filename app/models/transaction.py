@@ -3,25 +3,16 @@ from datetime import datetime
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    datetime = db.Column(db.DateTime, default=datetime.utcnow)
+    sender_acc_num = db.Column(db.String(50), db.ForeignKey('account.account_number'), nullable=False)  # Links to account_number
+    receiver_acc_num = db.Column(db.String(50), db.ForeignKey('account.account_number'), nullable=False)  # Links to account_number
+    receiver_username = db.Column(db.String(80), db.ForeignKey('user.username'), nullable=False)  # Links to username
     amount = db.Column(db.Float, nullable=False)
-    transaction_type = db.Column(db.String(50), nullable=False)  # 'credit' or 'debit'
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    description = db.Column(db.String(60), nullable=True)
 
-    # Relationships
-    sender = db.relationship('User', foreign_keys=[sender_id], backref='sent_transactions')
-    receiver = db.relationship('User', foreign_keys=[receiver_id], backref='received_transactions')
+    # Relationships for ORM queries
+    sender_account = db.relationship('Account', foreign_keys=[sender_acc_num], backref='transactions_sent')
+    receiver_account = db.relationship('Account', foreign_keys=[receiver_acc_num], backref='transactions_received')
 
-    """def __init__(self, sender_id, receiver_id, amount, transaction_type):
-        allowed_types = ['credit', 'debit']
-        if transaction_type not in allowed_types:
-            raise ValueError(f"Invalid transaction_type: {transaction_type}. Allowed types are {allowed_types}.")
-     
-        self.sender_id = sender_id
-        self.receiver_id = receiver_id
-        self.amount = amount
-        self.transaction_type = transaction_type
-        """
     def __repr__(self):
-        return f"<Transaction {self.id} | {self.transaction_type} | {self.amount}>"
+        return f"<Transaction {self.id}: {self.amount} from {self.sender_acc_num} to {self.receiver_acc_num}>"

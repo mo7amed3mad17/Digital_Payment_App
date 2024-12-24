@@ -1,37 +1,76 @@
 from flask import Blueprint, request, jsonify
 from app import db
 from app.models.transaction import Transaction
+from app.models.account import Account
 from app.models.user import User
 
 transaction_routes = Blueprint('transaction', __name__)
 
+
+
 @transaction_routes.route('/transactions', methods=['POST'])
 def create_transaction():
     data = request.get_json()
-    sender_id = data.get('sender_id')
-    receiver_id = data.get('receiver_id')
+    sender_acc_num = data.get('sender_acc_num')
+    receiver_acc_num = data.get('receiver_acc_num')
+    receiver_username = data.get('receiver_username')
     amount = data.get('amount')
-    transaction_type = data.get('transaction_type')
+    description = data.get('description', '')
 
-    if not all([sender_id, receiver_id, amount, transaction_type]):
+    # Validate input
+    if not all([sender_acc_num, receiver_acc_num, receiver_username, amount]):
         return jsonify({"error": "Missing required fields"}), 400
 
-    sender = User.query.get(sender_id)
-    receiver = User.query.get(receiver_id)
+    if amount <= 0:
+        return jsonify({"error": "Amount must be greater than 0"}), 400
 
-    if not sender or not receiver:
-        return jsonify({"error": "Invalid sender or receiver"}), 400
+    # Verify sender and receiver accounts
+    sender_account = Account.query.filter_by(account_number=sender_acc_num).first()
+    receiver_account = Account.query.filter_by(account_number=receiver_acc_num).first()
 
-    transaction = Transaction(
-        sender_id=sender_id,
-        receiver_id=receiver_id,
-        amount=amount,
-        transaction_type=transaction_type
-    )
-    db.session.add(transaction)
-    db.session.commit()
+    if not sender_account:
+        return jsonify({"error": "Sender account not found"}), 404
 
-    return jsonify({"message": "Transaction created successfully", "transaction": transaction.id}), 201
+    if not receiver_account:
+        return jsonify({"error": "Receiver account not found"}), 404
+
+    # Check sufficient balance
+    if sender_account.balance < amount:
+        return jsonify({"error": "Insufficient funds"}), 400
+
+    # Create transaction
+    try:
+        transaction = Transaction(
+            sender_acc_num=sender_acc_num,
+            receiver_acc_num=receiver_acc_num,
+            receiver_username=receiver_username,
+            amount=amount,
+            description=description
+        )
+
+        # Deduct from sender and add to receiver
+        sender_account.balance -= amount
+        receiver_account.balance += amount
+
+        db.session.add(transaction)
+        db.session.commit()
+
+        return jsonify({
+            "message": "Transaction completed successfully",
+            "transaction": {
+                "id": transaction.id,
+                "datetime": transaction.datetime,
+                "sender_acc_num": transaction.sender_acc_num,
+                "receiver_acc_num": transaction.receiver_acc_num,
+                "receiver_username": transaction.receiver_username,
+                "amount": transaction.amount,
+                "description": transaction.description
+            }
+        }), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
 
 @transaction_routes.route('/transactions/<int:user_id>', methods=['GET'])
 def get_user_transactions(user_id):

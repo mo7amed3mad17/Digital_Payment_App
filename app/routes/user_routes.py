@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from app import db
 from app.models.user import User
 from app.models.account import Account
@@ -19,7 +20,8 @@ def register_user():
         return jsonify({"error": "Missing required fields"}), 400
 
     # Create the user instance
-    user = User(username=username, email=email, password=password, phone_number=phone_number)
+    user = User(username=username, email=email, phone_number=phone_number)
+    user.set_password(password)
 
     try:
         db.session.add(user)
@@ -48,6 +50,20 @@ def register_user():
             "balance": account.balance,
         }
     }), 201
+
+
+@user_routes.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    user = User.query.filter_by(username=username).first()
+    if not user or not user.check_password(password):
+        return jsonify({"error": "Invalid username or password"}), 401
+
+    access_token = create_access_token(identity=str(user.id))
+    return jsonify({"access_token": access_token}), 200
 
 
 @user_routes.route('/users', methods=['GET'])

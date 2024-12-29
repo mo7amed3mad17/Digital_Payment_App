@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Payment App - Register</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Create Account</h1>
+        <form class="register-form">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="tel" id="phone" placeholder="Phone Number" required>
+            <button type="submit">Register</button>
+        </form>
+        <p id="message"></p>
+        <p>Already have an account? <a href="/login">Login</a></p>
+    </div>
+
+    <script>
+        document.querySelector('.register-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            try {
+                const response = await fetch('/api/v1/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username,
+                        password,
+                        email,
+                        phone_number: phone,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('message').textContent = 'Account created successfully!';
+                    setTimeout(() => {
+                        window.location.href = '/login'; // Redirect to login page
+                    }, 2000);
+                } else {
+                    document.getElementById('message').textContent = data.msg || 'Registration failed.';
+                }
+            } catch (error) {
+                document.getElementById('message').textContent = 'Error: Unable to register.';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -18,6 +18,7 @@ def transfer():
     # Parse JSON request data
     data = request.get_json()
     sender_acc_num = data.get('sender_acc_num')
+    sender_username = data.get('sender_username')
     receiver_acc_num = data.get('receiver_acc_num')
     receiver_username = data.get('receiver_username')
     amount = data.get('amount')
@@ -55,6 +56,7 @@ def transfer():
     # Create a new transaction record
     transaction = Transaction(
         sender_acc_num=sender_account.account_number,
+        sender_username=sender_username,
         receiver_acc_num=receiver_account.account_number,
         receiver_username=receiver_username,
         amount=amount,
@@ -71,6 +73,7 @@ def transfer():
         "transaction": {
             #"transaction_id": transaction.id,
             "sender_acc_num": sender_acc_num,
+            "sender_username": sender_username,
             "receiver_acc_num": receiver_acc_num,
             "receiver_username": receiver_username,
             "amount": amount,
@@ -80,13 +83,13 @@ def transfer():
     }), 200
 
 
-@transaction_routes.route('/<int:user_id>', methods=['GET'])
+@transaction_routes.route('/transactions/<int:user_id>', methods=['GET'])
 def get_user_transactions(user_id):
     user = User.query.get(user_id)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    sent = [{"id": t.id, "amount": t.amount, "to": t.receiver_id} for t in user.sent_transactions]
-    received = [{"id": t.id, "amount": t.amount, "from": t.sender_id} for t in user.received_transactions]
+    sent = [{"id": t.id, "amount": t.amount, "to": t.receiver_acc_num} for t in user.transactions_sent]
+    received = [{"id": t.id, "amount": t.amount, "from": t.sender_acc_num} for t in user.transactions_received]
 
-    return jsonify({"sent": sent, "received": received}), 200
+    return jsonify({"sent": sent, "received": received}), 200 #

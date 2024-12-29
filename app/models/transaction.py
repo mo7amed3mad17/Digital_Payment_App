@@ -5,6 +5,7 @@ class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime, default=datetime.utcnow)
     sender_acc_num = db.Column(db.String(50), db.ForeignKey('account.account_number'), nullable=False)  # Links to account_number
+    sender_username = db.Column(db.String(50), db.ForeignKey('user.username'), nullable=False)
     receiver_acc_num = db.Column(db.String(50), db.ForeignKey('account.account_number'), nullable=False)  # Links to account_number
     receiver_username = db.Column(db.String(80), db.ForeignKey('user.username'), nullable=False)  # Links to username
     amount = db.Column(db.Float, nullable=False)

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        .container button {
+            display: block;
+            width: calc(100% - 60px);
+            margin: 8px 20px;
+            padding: 5px;
+            text-decoration: none;
+            font-size: 15px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Transaction History</h1>
+        <h2>Sent Transactions</h2>
+        <ul id="sent-transactions">
+            <li>Loading sent transactions...</li>
+        </ul>
+        <h2>Received Transactions</h2>
+        <ul id="received-transactions">
+            <li>Loading received transactions...</li>
+        </ul>
+        <button id="back-to-account">Back to Account</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                alert('You are not logged in. Redirecting to login page.');
+                window.location.href = '/login';
+                return;
+            }
+
+            try {
+                // Fetch the current user ID
+                const userResponse = await fetch('/api/v1/users/me', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!userResponse.ok) {
+                    throw new Error('Failed to fetch user information');
+                }
+
+                const user = await userResponse.json();
+                const userId = user.id;
+
+                // Fetch transaction history
+                const response = await fetch(`/api/v1/transactions/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Populate sent transactions
+                    const sentList = document.getElementById('sent-transactions');
+                    sentList.innerHTML = '';
+                    if (data.sent.length > 0) {
+                        data.sent.forEach(tx => {
+                            const li = document.createElement('li');
+                            li.textContent = `To: ${tx.to}, Amount: ${tx.amount}`;
+                            sentList.appendChild(li);
+                        });
+                    } else {
+                        sentList.innerHTML = '<li>No sent transactions</li>';
+                    }
+
+                    // Populate received transactions
+                    const receivedList = document.getElementById('received-transactions');
+                    receivedList.innerHTML = '';
+                    if (data.received.length > 0) {
+                        data.received.forEach(tx => {
+                            const li = document.createElement('li');
+                            li.textContent = `From: ${tx.from}, Amount: ${tx.amount}`;
+                            receivedList.appendChild(li);
+                        });
+                    } else {
+                        receivedList.innerHTML = '<li>No received transactions</li>';
+                    }
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error fetching transactions: ${errorData.msg || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while fetching transaction history. Please try again.');
+            }
+        });
+
+        // Back to Account functionality
+        document.getElementById('back-to-account').addEventListener('click', () => {
+            window.location.href = '/account';
+        });
+    </script>
+</body>
+</html>

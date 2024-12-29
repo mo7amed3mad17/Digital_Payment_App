@@ -10,6 +10,7 @@ class User(db.Model):
     phone_number = db.Column(db.String(15), unique=True, nullable=False)
     accounts = db.relationship('Account', backref='user', lazy=True)
     transactions_received = db.relationship('Transaction', foreign_keys='Transaction.receiver_username', backref='receiver', lazy=True)
+    transactions_sent = db.relationship('Transaction', foreign_keys='Transaction.sender_username', backref='sender', lazy=True)
 
     def set_password(self, password):
         """Hash the password and store it in the password_hash field."""

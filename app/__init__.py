@@ -14,6 +14,7 @@ def create_app():
     JWTManager(app)
 
     # Import and register routes
+    from app.routes.ui_routes import ui_routes
     from app.routes.user_routes import user_routes
     from app.routes.account_routes import account_routes
     from app.routes.transaction_routes import transaction_routes
@@ -21,6 +22,7 @@ def create_app():
     app.register_blueprint(transaction_routes, url_prefix='/api/v1')
     app.register_blueprint(account_routes, url_prefix='/api/v1')
     app.register_blueprint(user_routes, url_prefix="/api/v1")
+    app.register_blueprint(ui_routes)
 
     # Import models
     from app.models.user import User

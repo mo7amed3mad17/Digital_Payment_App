@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            height: 100%;
+            width: 20%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #007bff;
+            padding-top: 20px;
+            color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar a, .sidebar button {
+            display: block;
+            width: calc(100% - 60px);
+            margin: 8px 20px;
+            padding: 5px;
+            text-decoration: none;
+            font-size: 15px;
+            color: white;
+            background-color: #02061859;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .sidebar a:hover, .sidebar button:hover {
+            background-color: #084a91;
+        }
+
+        .sidebar button {
+            background-color: #f44336;
+            position: relative;
+            margin: 450px 20px;
+        }
+
+        .main-content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .info-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .info-card p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        .info-card strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <a href="/transfer">Transfer</a>
+        <a href="/history">Transaction History</a>
+        <button id="logout">Logout</button>
+    </div>
+
+    <div class="main-content">
+        <h1>Welcome to Your Account</h1>
+        <div class="info-card">
+            <p><strong>Hi, </strong> <span id="username">Loading...</span></p>
+            <p><strong>Your balance is</strong> <span id="balance">Loading...</span> SDG</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                alert('You are not logged in. Redirecting to login page.');
+                window.location.href = '/login';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/v1/account', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // Display account information on the page
+                    document.getElementById('username').textContent = data.username;
+                    document.getElementById('balance').textContent = data.balance;
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.msg || 'Unable to fetch account data'}`);
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Error fetching account data:', error);
+                alert('An error occurred. Please try again.');
+                window.location.href = '/login';
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logout').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            alert('You have been logged out.');
+            window.location.href = '/login';
+        });
+    </script>
+</body>
+</html>

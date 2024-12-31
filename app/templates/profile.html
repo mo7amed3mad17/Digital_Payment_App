@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/images/icon.jpg">
+    <title>Profile</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        /* General page layout */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-header h1 {
+            font-size: 28px;
+            margin: 10px 0;
+        }
+
+        .profile-info {
+            margin-top: 20px;
+        }
+
+        .profile-info .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .profile-info .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #555;
+            flex: 1;
+        }
+
+        .info-value {
+            color: #333;
+            flex: 2;
+            text-align: right;
+        }
+
+        .edit-button {
+            display: block;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .edit-button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            text-align: center;
+            display: block;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-header h1 {
+                font-size: 24px;
+            }
+
+            .profile-info .info-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .info-label, .info-value {
+                text-align: left;
+                margin: 5px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .edit-button {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            a {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-header">
+            <h1>Your Informations</h1>
+        </div>
+        <div class="profile-info">
+            <div class="info-row">
+                <span class="info-label">Username:</span>
+                <span class="info-value" id="username">Loading...</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Email:</span>
+                <span class="info-value" id="email">Loading...</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Phone Number:</span>
+                <span class="info-value" id="phone-number">Loading...</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Account Number:</span>
+                <span class="info-value" id="account-number">Loading...</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Created At:</span>
+                <span class="info-value" id="created-at">Loading...</span>
+            </div>
+        </div>
+        <button class="edit-button">Edit Profile</button>
+        <a href="/account">Back to Account</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                alert('You are not logged in. Redirecting to login page.');
+                window.location.href = '/login';
+                return;
+            }
+
+            try {
+                const userResponse = await fetch('/api/v1/users/me', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!userResponse.ok) {
+                    throw new Error('Failed to fetch user information');
+                }
+
+                const user = await userResponse.json();
+                const userId = user.id;
+
+                const response = await fetch(`/api/v1/users/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Extract user and account data
+                    const user = data.user;
+                    const account = data.account;
+
+                    document.getElementById('username').textContent = `${user.username}`;
+                    document.getElementById('email').textContent = `${user.email || 'N/A'}`;
+                    document.getElementById('phone-number').textContent = `${user.phone_number || 'N/A'}`;
+                    document.getElementById('account-number').textContent = `${account.account_number}`;
+                    document.getElementById('created-at').textContent = `${new Date(account.created_at).toLocaleString()}`;
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.msg || 'Unable to fetch account data'}`);
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Error fetching account data:', error);
+                alert('An error occurred. Please try again.');
+                window.location.href = '/login';
+            }
+        });
+
+        // Placeholder functionality for Edit button
+        document.querySelector('.edit-button').addEventListener('click', () => {
+            alert('Edit Profile functionality is not implemented yet.');
+        });
+    </script>
+</body>
+</html>

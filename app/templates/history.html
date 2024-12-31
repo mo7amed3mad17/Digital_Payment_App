@@ -3,22 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/images/icon.jpg">
     <title>Transaction History</title>
     <link rel="stylesheet" href="/static/styles.css">
     <style>
+        /* General Container Styling */
+        .container {
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+            width: 90%;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        /* Transaction lists */
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        ul li {
+            background-color: #f8f9fa;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button styling */
         .container button {
             display: block;
-            width: calc(100% - 60px);
-            margin: 8px 20px;
-            padding: 5px;
-            text-decoration: none;
-            font-size: 15px;
+            width: calc(100% - 40px);
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 16px;
             color: white;
             background-color: #007bff;
             border: none;
             border-radius: 5px;
-            text-align: center;
             cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .container button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            ul {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            ul li {
+                flex: 1 1 calc(48% - 10px); /* Two items per row */
+            }
+
+            .container button {
+                width: 300px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            ul li {
+                flex: 1 1 calc(32% - 10px); /* Three items per row */
+            }
         }
     </style>
 </head>
@@ -81,7 +137,7 @@
                     if (data.sent.length > 0) {
                         data.sent.forEach(tx => {
                             const li = document.createElement('li');
-                            li.textContent = `To: ${tx.to}, Amount: ${tx.amount}`;
+                            li.textContent = `To: ${tx.to}, Amount: ${tx.amount}, Datetime: ${tx.datetime}`;
                             sentList.appendChild(li);
                         });
                     } else {
@@ -94,7 +150,7 @@
                     if (data.received.length > 0) {
                         data.received.forEach(tx => {
                             const li = document.createElement('li');
-                            li.textContent = `From: ${tx.from}, Amount: ${tx.amount}`;
+                            li.textContent = `From: ${tx.from}, Amount: ${tx.amount}, Datetime: ${tx.datetime}`;
                             receivedList.appendChild(li);
                         });
                     } else {

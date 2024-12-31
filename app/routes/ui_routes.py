@@ -6,7 +6,13 @@ from app.models.account import Account
 ui_routes = Blueprint('ui', __name__)
 
 @ui_routes.route('/')
-def home():
+@ui_routes.route('/home')
+@ui_routes.route('/about')
+def about():
+    return render_template('about.html')
+
+
+def login():
     return redirect(url_for('ui.login'))
 
 @ui_routes.route('/login')
@@ -20,6 +26,10 @@ def register():
 @ui_routes.route('/account')
 def account():
     return render_template('account.html')
+
+@ui_routes.route('/profile')
+def profile():
+    return render_template('profile.html')
 
 @ui_routes.route('/history')
 def transaction_history():

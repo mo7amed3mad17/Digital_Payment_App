@@ -60,7 +60,6 @@ def transfer():
         receiver_acc_num=receiver_account.account_number,
         receiver_username=receiver_username,
         amount=amount,
-        #transaction_type='transfer',
         description=description
     )
     db.session.add(transaction)
@@ -77,8 +76,8 @@ def transfer():
             "receiver_acc_num": receiver_acc_num,
             "receiver_username": receiver_username,
             "amount": amount,
-            "description": description
-            #"timestamp": transaction.timestamp
+            "description": description,
+            "timestamp": transaction.datetime
         }
     }), 200
 
@@ -89,7 +88,7 @@ def get_user_transactions(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    sent = [{"id": t.id, "amount": t.amount, "to": t.receiver_acc_num} for t in user.transactions_sent]
-    received = [{"id": t.id, "amount": t.amount, "from": t.sender_acc_num} for t in user.transactions_received]
+    sent = [{"id": t.id, "amount": t.amount, "to": t.receiver_acc_num, "datetime": t.datetime} for t in user.transactions_sent]
+    received = [{"id": t.id, "amount": t.amount, "from": t.sender_acc_num, "datetime": t.datetime} for t in user.transactions_received]
 
-    return jsonify({"sent": sent, "received": received}), 200 #
+    return jsonify({"sent": sent, "received": received}), 200

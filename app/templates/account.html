@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/images/icon.jpg">
     <title>Account</title>
     <link rel="stylesheet" href="/static/styles.css">
     <style>
@@ -16,7 +17,7 @@
         /* Sidebar styles */
         .sidebar {
             height: 100%;
-            width: 20%;
+            width: 250px;
             position: fixed;
             top: 0;
             left: 0;
@@ -24,6 +25,7 @@
             padding-top: 20px;
             color: white;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
         }
 
         .sidebar h2 {
@@ -33,32 +35,33 @@
 
         .sidebar a, .sidebar button {
             display: block;
-            width: calc(100% - 60px);
-            margin: 8px 20px;
-            padding: 5px;
+            width: calc(100% - 40px);
+            margin: 8px 10px;
+            padding: 10px;
             text-decoration: none;
-            font-size: 15px;
+            font-size: 16px;
             color: white;
-            background-color: #02061859;
+            background-color: rgba(255, 255, 255, 0.1);
             border: none;
             border-radius: 5px;
             text-align: center;
             cursor: pointer;
+            transition: background-color 0.2s;
         }
 
         .sidebar a:hover, .sidebar button:hover {
-            background-color: #084a91;
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
-        .sidebar button {
+        .sidebar button#logout {
             background-color: #f44336;
-            position: relative;
-            margin: 450px 20px;
+            margin-top: 20px;
         }
 
         .main-content {
-            margin-left: 270px;
+            margin-left: 250px;
             padding: 20px;
+            transition: margin-left 0.3s ease-in-out;
         }
 
         h1 {
@@ -81,13 +84,50 @@
         .info-card strong {
             color: #333;
         }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="sidebar">
+    <button class="menu-toggle" id="menuToggle">☰ Menu</button>
+
+    <div class="sidebar" id="sidebar">
         <h2>Menu</h2>
         <a href="/transfer">Transfer</a>
         <a href="/history">Transaction History</a>
+        <a href="/profile">Profile</a>
         <button id="logout">Logout</button>
     </div>
 
@@ -140,6 +180,23 @@
             localStorage.removeItem('token');
             alert('You have been logged out.');
             window.location.href = '/login';
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (event) => {
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(event.target) && 
+                event.target !== menuToggle) {
+                sidebar.classList.remove('active');
+            }
         });
     </script>
 </body>

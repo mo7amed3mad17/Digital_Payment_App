@@ -6,3 +6,4 @@ Flask-Cors==3.0.10         # For Cross-Origin Resource Sharing
 python-dotenv==1.0.0       # For environment variable management
 bcrypt==4.0.1              # For password hashing
 requests==2.31.0           # For making HTTP requests
+gunicorn==20.1.0

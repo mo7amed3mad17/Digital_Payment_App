@@ -11,4 +11,4 @@ if __name__ == "__main__":
         # Uncomment the following lines if testing or resetting database schema.
         #db.drop_all()
         db.create_all()
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

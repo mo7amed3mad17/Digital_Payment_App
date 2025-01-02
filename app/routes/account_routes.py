@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from app import db
 from app.models.account import Account
 from app.models.user import User
@@ -6,6 +7,7 @@ from app.models.user import User
 account_routes = Blueprint('account', __name__)
 
 @account_routes.route('/accounts', methods=['POST'])
+@jwt_required()
 def add_account():
     data = request.get_json()
     user_id = data.get('user_id')
@@ -30,6 +32,7 @@ def add_account():
     return jsonify({"message": "Account added successfully", "account": account.id}), 201
 
 @account_routes.route('/accounts/<int:user_id>', methods=['GET'])
+@jwt_required()
 def get_accounts(user_id):
     user = User.query.get(user_id)
     if not user:
@@ -42,6 +45,7 @@ def get_accounts(user_id):
     ]), 200
 
 @account_routes.route('/accounts/<int:account_id>', methods=['DELETE'])
+@jwt_required()
 def delete_account(account_id):
     account = Account.query.get(account_id)
     if not account:

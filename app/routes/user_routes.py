@@ -86,6 +86,7 @@ def get_current_user():
     }), 200
 
 @user_routes.route('/users/<int:user_id>', methods=['GET'])
+@jwt_required()
 def get_user_details(user_id):
     user = User.query.get(user_id)
     if not user:
@@ -134,6 +135,7 @@ def get_account_data():
 
 
 @user_routes.route('/users/<int:user_id>', methods=['DELETE'])
+@jwt_required()
 def delete_user(user_id):
     user = User.query.get(user_id)
     if not user:

@@ -83,6 +83,7 @@ def transfer():
 
 
 @transaction_routes.route('/transactions/<int:user_id>', methods=['GET'])
+@jwt_required()
 def get_user_transactions(user_id):
     user = User.query.get(user_id)
     if not user:

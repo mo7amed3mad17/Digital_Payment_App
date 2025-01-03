@@ -89,7 +89,7 @@ def get_user_transactions(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    sent = [{"id": t.id, "amount": t.amount, "to": t.receiver_acc_num, "datetime": t.datetime} for t in user.transactions_sent]
-    received = [{"id": t.id, "amount": t.amount, "from": t.sender_acc_num, "datetime": t.datetime} for t in user.transactions_received]
+    sent = [{"id": t.id, "username":t.receiver_username, "amount": t.amount, "to": t.receiver_acc_num, "datetime": t.datetime} for t in user.transactions_sent]
+    received = [{"id": t.id, "username":t.sender_username, "amount": t.amount, "from": t.sender_acc_num, "datetime": t.datetime} for t in user.transactions_received]
 
     return jsonify({"sent": sent, "received": received}), 200

@@ -38,3 +38,7 @@ def transaction_history():
 @ui_routes.route('/transfer')
 def transfer():
     return render_template('transfer.html')
+
+@ui_routes.route('/transfer-confirm')
+def transfer_confirm():
+    return render_template('/transfer-confirm.html')

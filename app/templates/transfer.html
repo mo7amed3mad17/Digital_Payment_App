@@ -42,16 +42,12 @@
             color: #555;
         }
 
-        input, textarea, button {
+        input, button {
             font-size: 16px;
             margin-bottom: 15px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-        }
-
-        textarea {
-            resize: none;
         }
 
         button {
@@ -64,11 +60,6 @@
 
         button:hover {
             background-color: #0056b3;
-        }
-
-        #status-message {
-            font-size: 16px;
-            text-align: center;
         }
 
         a {
@@ -90,16 +81,12 @@
                 font-size: 20px;
             }
 
-            input, textarea, button {
+            input, button {
                 font-size: 14px;
                 padding: 8px;
             }
 
             label {
-                font-size: 14px;
-            }
-
-            #status-message {
                 font-size: 14px;
             }
 
@@ -117,7 +104,7 @@
                 font-size: 18px;
             }
 
-            input, textarea, button {
+            input, button {
                 font-size: 12px;
                 padding: 6px;
             }
@@ -136,28 +123,11 @@
     <div class="container">
         <h1>Transfer Money</h1>
         <form id="transfer-form">
-            <label for="sender-account">Your Account Number:</label>
-            <input type="text" id="sender-account" placeholder="Enter your account number" required>
-            
-            <label for="sender-username">Sender Username:</label>
-            <input type="text" id="sender-username" placeholder="Enter Your username" required>
-
             <label for="receiver-account">Receiver Account Number:</label>
             <input type="text" id="receiver-account" placeholder="Enter receiver's account number" required>
 
-            <label for="receiver-username">Receiver Username:</label>
-            <input type="text" id="receiver-username" placeholder="Enter receiver's username" required>
-
-            <label for="amount">Amount (SDG):</label>
-            <input type="number" id="amount" placeholder="Enter amount" required min="1">
-
-            <label for="description">Description:</label>
-            <textarea id="description" placeholder="Enter a description (optional)" rows="3"></textarea>
-
-            <button type="submit">Send Money</button>
+            <button type="submit">Next</button>
         </form>
-
-        <p id="status-message" style="color: red; margin-top: 20px;"></p>
 
         <a href="/account">Back to Account</a>
     </div>
@@ -166,54 +136,15 @@
         document.getElementById('transfer-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const token = localStorage.getItem('token');
-            const senderAccount = document.getElementById('sender-account').value;
-            const senderUsername = document.getElementById('sender-username').value;
             const receiverAccount = document.getElementById('receiver-account').value;
-            const receiverUsername = document.getElementById('receiver-username').value;
-            const amount = document.getElementById('amount').value;
-            const description = document.getElementById('description').value;
 
-            if (!token) {
-                alert('You are not logged in. Redirecting to login page.');
-                window.location.href = '/login';
+            if (!receiverAccount) {
+                alert('Please enter a valid account number.');
                 return;
             }
 
-            try {
-                const response = await fetch('/api/v1/transfer', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        sender_acc_num: senderAccount,
-                        sender_username: senderUsername,
-                        receiver_acc_num: receiverAccount,
-                        receiver_username: receiverUsername,
-                        amount: parseFloat(amount),
-                        description: description || null,
-                    }),
-                });
-
-                const result = await response.json();
-                const statusMessage = document.getElementById('status-message');
-
-                if (response.ok) {
-                    statusMessage.style.color = 'green';
-                    statusMessage.textContent = 'Transfer successful!';
-                    setTimeout(() => {
-                        window.location.href = '/account'; // Redirect to account page
-                    }, 2000);
-                } else {
-                    statusMessage.style.color = 'red';
-                    statusMessage.textContent = result.msg || 'Transfer failed. Please try again.';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            }
+            // Redirect to the confirmation page with the receiver's account number as a query parameter
+            window.location.href = `/transfer-confirm?receiverAccount=${receiverAccount}`;
         });
     </script>
 </body>

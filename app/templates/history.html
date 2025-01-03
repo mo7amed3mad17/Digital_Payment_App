@@ -137,7 +137,7 @@
                     if (data.sent.length > 0) {
                         data.sent.forEach(tx => {
                             const li = document.createElement('li');
-                            li.textContent = `To: ${tx.to}, Amount: ${tx.amount}, Datetime: ${tx.datetime}`;
+                            li.textContent = `To: ${tx.username} - With Account Number: ${tx.to} - Amount: ${tx.amount} - At: ${tx.datetime}`;
                             sentList.appendChild(li);
                         });
                     } else {
@@ -150,7 +150,7 @@
                     if (data.received.length > 0) {
                         data.received.forEach(tx => {
                             const li = document.createElement('li');
-                            li.textContent = `From: ${tx.from}, Amount: ${tx.amount}, Datetime: ${tx.datetime}`;
+                            li.textContent = `From: ${tx.username} - With Account Number: ${tx.from} - Amount: ${tx.amount} - At: ${tx.datetime}`;
                             receivedList.appendChild(li);
                         });
                     } else {

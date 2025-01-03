@@ -70,7 +70,7 @@ def transfer():
     return jsonify({
         "msg": "Transfer successful",
         "transaction": {
-            #"transaction_id": transaction.id,
+            "transaction_id": transaction.id,
             "sender_acc_num": sender_acc_num,
             "sender_username": sender_username,
             "receiver_acc_num": receiver_acc_num,

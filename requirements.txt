@@ -1,6 +1,7 @@
 Flask==2.3.3
 Flask-SQLAlchemy==3.0.5
 Flask-JWT-Extended==4.4.4
+psycopg2-binary
 Flask-Migrate==4.0.4       # For handling database migrations
 Flask-Cors==3.0.10         # For Cross-Origin Resource Sharing
 python-dotenv==1.0.0       # For environment variable management

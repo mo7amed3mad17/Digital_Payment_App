@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 
 # Initialize SQLAlchemy
@@ -11,6 +12,7 @@ def create_app():
 
     # Initialize extensions
     db.init_app(app)
+    Migrate(app, db)
     JWTManager(app)
 
     # Import and register routes

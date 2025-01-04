@@ -7,10 +7,16 @@ ui_routes = Blueprint('ui', __name__)
 
 @ui_routes.route('/')
 @ui_routes.route('/home')
+def home():
+    return render_template('home.html')
+
 @ui_routes.route('/about')
 def about():
     return render_template('about.html')
 
+@ui_routes.route('/contact')
+def contact():
+    return render_template('contact.html')
 
 def login():
     return redirect(url_for('ui.login'))

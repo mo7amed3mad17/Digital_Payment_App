@@ -1,110 +1,147 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/static/images/icon.jpg">
-    <title>About - Digital Payment App</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mohamed - Digital Payment App</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/icon" href="static/logo/Tap.png">
+
+    <!-- Internal CSS -->
     <style>
-        /* General page styling */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
-        }
-
-        .hero {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            box-sizing: border-box;
-
-            /* Background Image */
-            background-image: url('/static/images/Background.jpg'); /* Replace with your image path */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-
-            /* Add a semi-transparent overlay for readability */
-            background-color: rgba(0, 0, 0, 0.5); /* Black overlay */
-            background-blend-mode: overlay;
-        }
-
-        .hero h1 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        .hero p {
-            font-size: 18px;
-            max-width: 600px;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .btn {
-            background-color: #007bff;
+            background-color: #f4f4f4;
             color: #333;
-            border: none;
-            padding: 15px 30px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 5px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
         }
 
-        .btn:hover {
+        header {
             background-color: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: sticky;
+            top: 0;
         }
 
-        /* Responsive design */
+        header a {
+            text-decoration: none;
+            color: white;
+            font-size: 24px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .about {
+            padding: 20px;
+            background: #fff;
+            margin: 20px auto;
+            max-width: 900px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-heading {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .content {
+            line-height: 1.6;
+            text-align: left;
+            margin: 10px 0;
+        }
+
+        .contact-info {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .contact-info div {
+            text-align: center;
+        }
+
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 28px;
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
             }
 
-            .hero p {
-                font-size: 16px;
-            }
-
-            .btn {
-                padding: 12px 25px;
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 24px;
-            }
-
-            .hero p {
-                font-size: 14px;
-            }
-
-            .btn {
-                padding: 10px 20px;
-                font-size: 12px;
+            .contact-info {
+                flex-direction: column;
+                gap: 15px;
             }
         }
     </style>
 </head>
+
 <body>
-    <div class="hero">
-        <h1>Welcome to My Digital Payment App</h1>
-        <p>
-            My app provides a secure and efficient way to transfer money and manage your finances with ease. Enjoy the benefits of fast transactions, detailed history tracking, and seamless account management. Join us today and experience the future of digital payments!
-        </p>
-        <a href="/register" class="btn">Get Started</a>
-    </div>
+    <!-- Header -->
+    <header>
+        <h1>Digital Payment App</h1>
+        <nav>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="section-heading">
+            <h2>About the Payment App</h2>
+        </div>
+        <div class="content">
+            <p>
+                Welcome to my digital payment solution! This app allows users to create accounts and transfer money 
+                securely and efficiently. The focus is on providing a straightforward user-to-user transaction experience 
+                with a reliable and user-friendly interface.
+            </p>
+            <h3>Current Features</h3>
+            <ul>
+                <li>Create an account with a unique account number.</li>
+                <li>Transfer money seamlessly between registered users.</li>
+                <li>Secure and reliable transaction process.</li>
+            </ul>
+            <h3>Future Enhancements</h3>
+            <p>
+                I plan to expand the app with features such as mobile balance top-ups, bill payments, transaction history tracking, 
+                and enhanced analytics to provide a comprehensive digital payment experience.
+            </p>
+        </div>
+        <div class="contact-info">
+            <div>
+                <h3>Phone</h3>
+                <p>+249 128 08 7036</p>
+            </div>
+            <div>
+                <h3>Email</h3>
+                <p>memo12317emad@gmail.com</p>
+            </div>
+        </div>
+    </section>
 </body>
+
 </html>

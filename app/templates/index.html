@@ -7,125 +7,59 @@
     <title>Login</title>
     <link rel="stylesheet" href="/static/styles.css">
     <style>
-        /* General page styling */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-        }
 
-        .container {
-            width: 90%;
-            max-width: 400px;
-            margin: 50px auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
             text-align: center;
         }
 
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #333;
+        header h1 {
+            color: #fff;
         }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        input {
-            font-size: 16px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        p {
-            font-size: 14px;
-            color: #555;
-        }
-
-        p a {
-            color: #007bff;
+        header a {
             text-decoration: none;
+            color: #fff;
+            font-size: 24px;
         }
 
-        p a:hover {
-            text-decoration: underline;
+        nav {
+            margin-top: 10px;
         }
 
-        #message {
-            font-size: 14px;
-            margin-top: 15px;
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
         }
 
-        /* Responsive design */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 20px;
-            }
-
-            input, button {
-                font-size: 14px;
-                padding: 8px;
-            }
-
-            p {
-                font-size: 12px;
-            }
-
-            #message {
-                font-size: 12px;
-            }
+        nav ul li {
+            display: inline;
         }
 
-        @media (max-width: 480px) {
-            .container {
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 18px;
-            }
-
-            input, button {
-                font-size: 12px;
-                padding: 6px;
-            }
-
-            p {
-                font-size: 12px;
-            }
-
-            #message {
-                font-size: 12px;
-            }
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
         }
+
     </style>
 </head>
 <body>
-    <div class="container">
+    <header>
         <h1>Digital Payment App</h1>
+        <nav>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Login</h1>
         <form id="login-form">
             <input type="text" id="username" placeholder="Username" required>
             <input type="password" id="password" placeholder="Password" required>
@@ -137,13 +71,12 @@
 
     <script>
         document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault(); // Prevent form from reloading the page
-
+            e.preventDefault(); 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
             try {
-                const response = await fetch('/api/v1/login', { // Ensure route matches backend
+                const response = await fetch('/api/v1/login', { 
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -154,10 +87,8 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Save the token in localStorage
                     localStorage.setItem('token', data.access_token);
 
-                    // Redirect to the account page
                     window.location.href = '/account';
                 } else {
                     document.getElementById('message').textContent = data.error || 'Login failed.';

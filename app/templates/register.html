@@ -6,8 +6,56 @@
     <link rel="icon" type="image/x-icon" href="/static/images/icon.jpg">
     <title>Register</title>
     <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            color: #fff;
+        }
+
+        header a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 24px;
+        }
+
+        nav {
+            margin-top: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>Digital Payment App</h1>
+        <nav>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
     <div class="container">
         <h1>Create Account</h1>
         <form class="register-form">

@@ -142,8 +142,10 @@ def delete_user(user_id):
         return jsonify({"error": "User not found"}), 404
 
     for account in user.accounts:
-        for transaction in account.transactions:
-            db.session.delete(transaction)
+        for transaction_s in account.transactions_sent:
+            db.session.delete(transaction_s)
+        for transaction_r in account.transactions_received:
+            db.session.delete(transaction_r)
         db.session.delete(account)
 
     db.session.delete(user)

@@ -16,19 +16,19 @@
 
 ## Architecture
 
-The app is built using **Flask** as the web framework, **Gunicorn** as the WSGI server for production deployment, and **SQLite** as the database for storing user and transaction data. The app is deployed on **Render.com** for easy cloud hosting.
+The app is built using **Flask** as the web framework, **Gunicorn** as the WSGI server for production deployment, and **PostgreSQL** as the database for storing user and transaction data. The app is deployed on **Render.com** for easy cloud hosting.
 
 The project includes the following main components:
 - **User Model**: Stores user data such as username, password, etc.
 - **Account Model**: Each user has an associated account containing their account number and balance.
 - **Transaction Model**: Stores details of money transfers between users, including sender and receiver details and the transaction amount.
 
-The app uses **Flask** to handle HTTP requests and responses, with **Gunicorn** serving the application in production. The database is managed using **SQLite**, and the application is deployed on **Render.com** to provide a scalable cloud hosting solution.
+The app uses **Flask** to handle HTTP requests and responses, with **Gunicorn** serving the application in production. The database is managed using **PostgreSQL**, and the application is deployed on **Render.com** to provide a scalable cloud hosting solution.
 
 ## Technologies Used
 
 - **Backend Framework**: Flask
-- **Database**: SQLite
+- **Database**: PostgreSQL
 - **Security**: JWT for user authentication
 - **Frontend**: HTML/CSS for simple front-end development
 - **Testing**: Postman for testing API endpoints
@@ -38,7 +38,7 @@ The app uses **Flask** to handle HTTP requests and responses, with **Gunicorn** 
 ### Prerequisites
 
 - Python 3.x
-- SQLite3
+- PostgreSQL
 
 ### Installation
 

@@ -1,6 +1,16 @@
 
 # Simple Payments App
 
+## Main Pages of the application
+![Home Page](Home.jpg)
+![Login Page](Login.jpg)
+![Main Page](Main_page.jpg)
+![Transfer 1](Transfer_1.jpg)
+![Transfer 2](Transfer_2.jpg)
+![Transaction History](Transaction.jpg)
+![Profile](Profile.jpg)
+
+
 ## Overview
 
 **Simple Payments** is a streamlined financial application designed to simplify peer-to-peer money transfers while maintaining robust security. Users can manage their transactions, track payment history, and connect with other users through unique account numbers.
